@@ -36,7 +36,6 @@ export const PendentesProvider = ({ children }) => {
       const token = await getToken();
       const cardCriado = await completarPendente(id, dados, token);
  
-      toast.success("Avaliação criada com sucesso");
       setPendentes((prev) => prev.filter((p) => p.id !== id));
  
       // Busca a lista atualizada do backend em vez de tentar adivinhar
