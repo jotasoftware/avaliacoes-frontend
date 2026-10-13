@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 export function useKanban(avaliacoes) {
   const [board, setBoard] = useState({
+    entrada: [],
     todo: [],
     doing: [],
     done: [],
@@ -12,6 +13,7 @@ export function useKanban(avaliacoes) {
     const lista = avaliacoes || [];
 
     setBoard({
+      entrada: lista.filter((a) => a.status === "entrada"),
       todo: lista.filter((a) => a.status === "todo"),
       doing: lista.filter((a) => a.status === "doing"),
       done: lista.filter((a) => a.status === "done"),

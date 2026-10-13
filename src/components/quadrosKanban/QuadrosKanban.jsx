@@ -79,8 +79,8 @@ const QuadrosKanban = () => {
   return (<>
     <DndContext sensors={sensors} onDragEnd={onDragEnd}>
       <div className="flex gap-4 w-full bg-zinc-100 p-4">
-
-        <QuadroKanban titulo="A fazer" id="todo" data={board.todo} openModal={openModalAvaliacao} onEdit={handleEdit} onDelete={handleDelete}/>
+        <QuadroKanban titulo="Entrada" id="entrada" data={board.entrada} openModal={openModalAvaliacao} onEdit={handleEdit} onDelete={handleDelete}/>
+        <QuadroKanban titulo="A fazer" id="todo" data={board.todo} onEdit={handleEdit} onDelete={handleDelete}/>
         <QuadroKanban titulo="Fazendo" id="doing" data={board.doing} onEdit={handleEdit} onDelete={handleDelete}/>
         <QuadroKanban titulo="Feito" id="done" data={board.done} onEdit={handleEdit} onDelete={handleDelete}/>
 

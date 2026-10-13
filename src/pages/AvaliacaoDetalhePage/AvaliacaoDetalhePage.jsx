@@ -178,17 +178,6 @@ const AvaliacaoDetalhePage = () => {
             </p>
           </div>
 
-
-          <div>
-            <p className="text-sm text-zinc-500">
-              Tamanho
-            </p>
-
-            <p className="font-medium text-zinc-800">
-              {avaliacao.tamanho}
-            </p>
-          </div>
-
         </div>
 
 

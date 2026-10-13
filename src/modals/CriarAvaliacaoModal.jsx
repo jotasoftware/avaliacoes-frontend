@@ -26,8 +26,7 @@ const CriarAvaliacaoModal = ({
     estado: "",
     proprietario: "",
     tipo: "",
-    tamanho: "",
-    status: "todo",
+    status: "entrada",
     ordem: 0,
   };
 
@@ -47,7 +46,6 @@ const CriarAvaliacaoModal = ({
         estado: pendente.estado || "",
         proprietario: "",
         tipo: "",
-        tamanho: "",
         status: "doing",
         ordem: 0,
       });
@@ -58,7 +56,6 @@ const CriarAvaliacaoModal = ({
         estado: avaliacaoEdit.estado || "",
         proprietario: avaliacaoEdit.proprietario || "",
         tipo: avaliacaoEdit.tipo || "",
-        tamanho: avaliacaoEdit.tamanho || "",
         status: avaliacaoEdit.status || "todo",
         ordem: avaliacaoEdit.ordem || 0,
       });
@@ -82,6 +79,7 @@ const CriarAvaliacaoModal = ({
 
 
   const validarTudo = (obj) => {
+    console.log(obj)
     return Object.entries(obj)
       .filter(([chave]) => 
         chave !== "status" && chave !== "ordem"
@@ -112,7 +110,6 @@ const CriarAvaliacaoModal = ({
           estado: avaliacao.estado,
           proprietario: avaliacao.proprietario,
           tipo: avaliacao.tipo,
-          tamanho: avaliacao.tamanho,
         });
 
         toast.info("Avaliação criada com sucesso");
@@ -121,7 +118,6 @@ const CriarAvaliacaoModal = ({
 
         const dados = {
           ...avaliacao,
-          tamanho: avaliacao.tamanho,
         };
 
         if (avaliacaoEdit) {
@@ -239,16 +235,6 @@ const CriarAvaliacaoModal = ({
               { id: "urbano", nome: "Urbano" },
             ]}
             placeholder="Selecione o tipo"
-          />
-
-
-          <CampoForm
-            label="Tamanho"
-            value={avaliacao.tamanho}
-            onChange={(v) =>
-              onChangeAvaliacao("tamanho", v)
-            }
-            placeholder="Digite o tamanho"
           />
 
         </div>

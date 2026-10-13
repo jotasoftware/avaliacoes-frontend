@@ -16,7 +16,7 @@ const QuadroKanban = ({ titulo, id, data, openModal, onEdit, onDelete }) => {
         <h2 className="text-sm font-semibold text-zinc-700">
           {titulo}
         </h2>
-        {titulo == "A fazer" && 
+        {(titulo == "Entrada") && 
                 <button
                 onClick={openModal}
                 className="text-sm font-bold text-zinc-500 hover:text-zinc-800"
