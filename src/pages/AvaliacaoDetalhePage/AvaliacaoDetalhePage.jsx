@@ -15,6 +15,8 @@ const AvaliacaoDetalhePage = () => {
   const avaliacao = location.state?.avaliacao;
   const [tipoExportacao, setTipoExportacao] = useState("imagens");
 
+  const [baixandoId, setBaixandoId] = useState(null);
+
   useEffect(() => {
     if (avaliacao?.id) {
       fetchAvaliacao(avaliacao.id);
@@ -28,22 +30,29 @@ const AvaliacaoDetalhePage = () => {
     }
   }, [loadingAvaliacao, avaliacaoSelecionada]);
 
-  const handleExportar = () => {
-    if(tipoExportacao=="imagens"){
+  const handleExportar = async (doc) => {
+    if (tipoExportacao == "imagens") {
       if (Object.keys(imagensPorFolha).length === 0) {
         toast.warn("Não há o que exportar");
         return;
       }
       const dadosExportacao = {
         avaliacaoId: avaliacao.id,
-        imagens: imagensPorFolha
+        imagens: imagensPorFolha,
       };
       exportarImagens(dadosExportacao);
-    }else{
-      exportarDocumentos(avaliacaoSelecionada?.subpastas?.documentos?.id)
+    } else {
+      try {
+        setBaixandoId(doc.id);
+        await exportarDocumentos(doc);
+      } catch (err) {
+        console.error(err);
+        toast.error("Erro ao baixar o documento");
+      } finally {
+        setBaixandoId(null);
+      }
     }
   };
-
 
   if (!avaliacao) {
     return (
@@ -402,57 +411,77 @@ const AvaliacaoDetalhePage = () => {
             "
           >
             {loadingAvaliacao ? (
-              <div className="w-full flex justify-center py-10">
-                <Loading />
-              </div>
-            ) : (
-              <>
-                {!avaliacaoSelecionada?.subpastas?.documentos?.quantidadePastas ? (
-                  <p className="text-sm text-zinc-500 text-center py-6">
-                    Nenhum documento encontrado
-                  </p>
-                ) : (
-                  <p className="text-sm font-medium text-zinc-800 text-center py-6">
-                    {avaliacaoSelecionada.subpastas.documentos.quantidadePastas}{" "}
-                    {avaliacaoSelecionada.subpastas.documentos.quantidadePastas === 1
-                      ? "documento encontrado"
-                      : "documentos encontrados"}
-                  </p>
-                )}
-                <div className="flex justify-end mt-6">
-                  <button
-                    onClick={handleExportar}
-                    disabled={
-                      loadingAvaliacao ||
-                      !avaliacaoSelecionada?.subpastas?.documentos?.quantidadePastas
-                    }
-                    className="
-                      flex-1
-                      py-3
-                      text-sm
-                      text-white
-                      font-medium
-                      transition
-                      bg-zinc-700
-                      rounded-lg
-                      hover:bg-zinc-800
-                      disabled:opacity-50
-                      disabled:cursor-not-allowed
-                      disabled:hover:bg-zinc-700
-                      flex
-                      items-center
-                      justify-center
-                      gap-2
-                    "
-                  >
-                    {loadingAvaliacao && (
-                      <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    )}
-                    {loadingAvaliacao ? "Exportando..." : "Exportar"}
-                  </button>
-                </div>
-              </>
+  <div className="w-full flex justify-center py-10">
+    <Loading />
+  </div>
+) : (
+  <div className="flex flex-col">
+    {!avaliacaoSelecionada?.subpastas?.documentos?.length ? (
+      <p className="text-sm text-zinc-500 text-center py-6">
+        Nenhum documento encontrado
+      </p>
+    ) : (
+      avaliacaoSelecionada.subpastas.documentos.map((doc) => (
+        <div
+          key={doc.id}
+          className="
+            flex
+            items-center
+            justify-between
+            gap-4
+            border
+            border-zinc-200
+            rounded-lg
+            p-3
+            mb-3
+          "
+        >
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-zinc-800 truncate">
+              {doc.nome}
+            </p>
+
+            <p className="text-xs text-zinc-500">
+              {new Date(doc.criadoEm).toLocaleString("pt-BR", {
+                dateStyle: "short",
+                timeStyle: "short",
+              })}
+            </p>
+          </div>
+
+          <button
+            onClick={() => handleExportar(doc)}
+            disabled={baixandoId === doc.id}
+            className="
+              shrink-0
+              px-4
+              py-2
+              text-sm
+              text-white
+              font-medium
+              transition
+              bg-zinc-700
+              rounded-lg
+              hover:bg-zinc-800
+              disabled:opacity-50
+              disabled:cursor-not-allowed
+              disabled:hover:bg-zinc-700
+              flex
+              items-center
+              justify-center
+              gap-2
+            "
+          >
+            {baixandoId === doc.id && (
+              <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
             )}
+            {baixandoId === doc.id ? "Baixando..." : "Baixar"}
+          </button>
+        </div>
+      ))
+    )}
+  </div>
+)}
           </div>
         )}
       </div>

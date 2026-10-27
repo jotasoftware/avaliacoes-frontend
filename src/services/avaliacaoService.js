@@ -127,7 +127,7 @@ export const exportarImagens = async (dadosExportacao, token) => {
 export const exportarDocumentos = async (id, token) => {
   try {
     const response = await api.post(
-      `${API_CONFIG.avaliacao.exportarDocumentos}/${id}`,
+      `${API_CONFIG.avaliacao.exportarDocumento}/${id}`,
       {},
       {
         headers: getHeaders(token),

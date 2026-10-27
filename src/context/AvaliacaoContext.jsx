@@ -229,7 +229,7 @@ export const AvaliacaoProvider = ({ children }) => {
         }
     };
 
-    const exportarDocumentos = async (idPasta) => {
+    const exportarDocumentos = async (doc) => {
         setLoadingAvaliacao(true);
     
         try {
@@ -237,16 +237,13 @@ export const AvaliacaoProvider = ({ children }) => {
     
             updateActivity();
     
-            const blob = await apiExportarDocumentos(
-                idPasta,
-                token
-            );
+            const blob = await apiExportarDocumentos(doc.id, token);
     
             const url = window.URL.createObjectURL(blob);
     
             const link = document.createElement("a");
             link.href = url;
-            link.download = "documentos_avaliacao.docx";
+            link.download = `${doc.nome}.docx`;
     
             document.body.appendChild(link);
             link.click();
