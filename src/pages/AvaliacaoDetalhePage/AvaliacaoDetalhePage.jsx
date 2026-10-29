@@ -22,13 +22,6 @@ const AvaliacaoDetalhePage = () => {
       fetchAvaliacao(avaliacao.id);
     }
   }, [avaliacao]);
-  
-  
-  useEffect(() => {
-    if (!loadingAvaliacao && avaliacaoSelecionada) {
-      console.log(avaliacaoSelecionada);
-    }
-  }, [loadingAvaliacao, avaliacaoSelecionada]);
 
   const handleExportar = async (doc) => {
     if (tipoExportacao == "imagens") {
@@ -37,6 +30,8 @@ const AvaliacaoDetalhePage = () => {
         return;
       }
       const dadosExportacao = {
+        avaliacaoMat:avaliacao.matricula,
+        avaliacaoNome: avaliacao.proprietario,
         avaliacaoId: avaliacao.id,
         imagens: imagensPorFolha,
       };

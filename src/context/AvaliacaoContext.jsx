@@ -212,7 +212,7 @@ export const AvaliacaoProvider = ({ children }) => {
     
             const link = document.createElement("a");
             link.href = url;
-            link.download = "imagens_avaliacao.docx";
+            link.download = `Imagens_${dadosExportacao.avaliacaoMat}_${dadosExportacao.avaliacaoNome}.docx`;
     
             document.body.appendChild(link);
             link.click();
