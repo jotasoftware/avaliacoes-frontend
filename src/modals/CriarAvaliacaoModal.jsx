@@ -200,6 +200,7 @@ const CriarAvaliacaoModal = ({
                 }
                 options={[
                   { id: "BA", nome: "Bahia" },
+                  { id: "DF", nome: "Distrito Federal" },
                   { id: "GO", nome: "Goiás" },
                   { id: "MT", nome: "Mato Grosso" },
                   { id: "MS", nome: "Mato Grosso do Sul" },
