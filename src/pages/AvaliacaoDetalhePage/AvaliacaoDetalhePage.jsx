@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { useAvaliacao } from "../../context/AvaliacaoContext";
 import Loading from "../../components/loading/Loading";
+import UploadDocumentoModal from "../../modals/UploadDocumentModal"; 
 import { toast } from "react-toastify";
 
 const AvaliacaoDetalhePage = () => {
@@ -10,12 +11,16 @@ const AvaliacaoDetalhePage = () => {
   const location = useLocation();
 
   const {fetchAvaliacao, avaliacaoSelecionada, loadingAvaliacao, exportarImagens, exportarDocumentos} = useAvaliacao();
+
   
   const [imagensPorFolha, setImagensPorFolha] = useState({});
   const avaliacao = location.state?.avaliacao;
+  console.log(avaliacaoSelecionada)
   const [tipoExportacao, setTipoExportacao] = useState("imagens");
 
   const [baixandoId, setBaixandoId] = useState(null);
+
+  const [openUpload, setOpenUpload] = useState(false);
 
   useEffect(() => {
     if (avaliacao?.id) {
@@ -48,6 +53,19 @@ const AvaliacaoDetalhePage = () => {
       }
     }
   };
+
+  const handleAdicionar = () => {
+    if (tipoExportacao === "imagens") {
+      window.open(
+        `https://drive.google.com/drive/folders/${avaliacaoSelecionada?.subpastas?.imagensFolder}`,
+        "_blank",
+        "noopener,noreferrer"
+      );
+    } else {
+      setOpenUpload(true);
+    }
+  };
+
 
   if (!avaliacao) {
     return (
@@ -181,31 +199,31 @@ const AvaliacaoDetalhePage = () => {
               {avaliacao.estado}
             </p>
           </div>
+          {avaliacao.id_drive && (
+            <div>
+
+              <p className="text-sm text-zinc-500">
+                Documentos
+              </p>
+
+              <a
+                href={`https://drive.google.com/drive/folders/${avaliacao.id_drive}`}
+                target="_blank"
+                rel="noreferrer"
+                className="
+                  text-blue-600
+                  hover:underline
+                "
+              >
+                Abrir Google Drive
+              </a>
+
+            </div>
+          )}
 
         </div>
 
 
-        {avaliacao.id_drive && (
-          <div className="mt-8">
-
-            <p className="text-sm text-zinc-500 mb-2">
-              Documentos
-            </p>
-
-            <a
-              href={`https://drive.google.com/drive/folders/${avaliacao.id_drive}`}
-              target="_blank"
-              rel="noreferrer"
-              className="
-                text-blue-600
-                hover:underline
-              "
-            >
-              Abrir Google Drive
-            </a>
-
-          </div>
-        )}
 
       </div>
       
@@ -217,17 +235,42 @@ const AvaliacaoDetalhePage = () => {
         shadow-sm
         p-8
       ">
+        <div className="flex justify-between">
+          <h1 className="
+            text-xl
+            font-semibold
+            text-zinc-800
+            mb-6
+          ">
+            Anexos
+          </h1>
+          {
+            (avaliacaoSelecionada?.subpastas?.imagensFolder || tipoExportacao !== "imagens") && 
+          <div className="flex justify-end mb-4">
+              <button
+                onClick={handleAdicionar}
+                disabled={loadingAvaliacao}
+                className="
+                  px-4
+                  py-2
+                  text-sm
+                  text-white
+                  font-medium
+                  transition
+                  bg-zinc-700
+                  rounded-lg
+                  hover:bg-zinc-800
+                  disabled:opacity-50
+                  disabled:cursor-not-allowed
+                "
+              >
+                Adicionar {tipoExportacao === "documentos" ? "Documentos" : "Imagens"}
+              </button>
+            </div>
+          }
+        </div>
 
-        <h1 className="
-          text-xl
-          font-semibold
-          text-zinc-800
-          mb-6
-        ">
-          Exportar
-        </h1>
-
-
+          
         <div className="
           flex
           w-full
@@ -480,9 +523,12 @@ const AvaliacaoDetalhePage = () => {
           </div>
         )}
       </div>
+      <UploadDocumentoModal
+        open={openUpload}
+        onClose={() => setOpenUpload(false)}
+        avaliacao={avaliacao}
+      />
     </div>
-
-    
   );
 };
 

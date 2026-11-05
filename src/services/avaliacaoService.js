@@ -141,3 +141,29 @@ export const exportarDocumentos = async (id, token) => {
     tratarErro(error, "Erro ao exportar documentos");
   }
 };
+
+export const uploadDocumentos = async ({ files, matNumber, cidade, estado }, token, onProgress) => {
+  console.log(token)
+  try {
+    const form = new FormData();
+    files.forEach((f) => form.append("files", f));
+    form.append("matNumber", matNumber);
+    form.append("cidade", cidade);
+    form.append("estado", estado);
+
+    const { data } = await api.post(
+      API_CONFIG.avaliacao.uploadDocumentos,
+      form,
+      {
+        headers: getHeaders(token),
+        timeout: 0, 
+        onUploadProgress: (e) => {
+          if (e.total) onProgress?.(Math.round((e.loaded * 100) / e.total));
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    tratarErro(error, "Erro ao enviar documentos");
+  }
+};

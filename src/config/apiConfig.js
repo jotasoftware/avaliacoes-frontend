@@ -10,6 +10,7 @@ export const API_CONFIG = {
         moveCard: `${URL}/avaliacao`,
         exportarImagens: `${URL}/download/imagens`,
         exportarDocumento: `${URL}/download/documento`,
+        uploadDocumentos: `${URL}/upload/front/document`,
     },
     ferramentas: {
         poligonoCar: `${URL}/download/front/car`,

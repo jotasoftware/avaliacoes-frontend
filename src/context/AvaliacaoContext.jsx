@@ -9,7 +9,8 @@ import {
     deleteAvaliacao as apiDeleteAvaliacao,
     moveCard as apiMoveCard,
     exportarImagens as apiExportarImagens,
-    exportarDocumentos as apiExportarDocumentos
+    exportarDocumentos as apiExportarDocumentos,
+    uploadDocumentos as apiUploadDocumentos
 } from "../services/avaliacaoService";
 
 import { useAuth } from "./AuthContext";
@@ -260,6 +261,44 @@ export const AvaliacaoProvider = ({ children }) => {
         }
     };
 
+    const enviarDocumentos = async (dados, onProgress) => {
+        setLoadingAvaliacao(true);
+
+        try {
+            const token = await getToken();
+
+            updateActivity();
+
+            const resultado = await apiUploadDocumentos(dados, token, onProgress);
+
+            // acrescenta os Words novos à lista, sem buscar tudo de novo
+            const agora = new Date().toISOString();
+            const novos = (resultado?.documents ?? [])
+                .map((d) => ({ id: d.wordFileId, nome: d.nome, criadoEm: agora }))
+                .reverse(); // o último processado é o mais recente
+
+            setAvaliacaoSelecionada((prev) =>
+                prev
+                    ? {
+                          ...prev,
+                          subpastas: {
+                              ...prev.subpastas,
+                              documentos: [...novos, ...(prev.subpastas?.documentos ?? [])],
+                          },
+                      }
+                    : prev
+            );
+
+            return resultado;
+
+        } catch (error) {
+            console.error("Erro ao enviar documentos:", error);
+            throw error;
+        } finally {
+            setLoadingAvaliacao(false);
+        }
+    };
+
     const adicionarAvaliacaoLocal = (avaliacao) => {
         setAvaliacoes((prev) => [avaliacao, ...(prev || [])]);
     };
@@ -317,6 +356,8 @@ export const AvaliacaoProvider = ({ children }) => {
 
     exportarImagens,
     exportarDocumentos,
+
+    enviarDocumentos,
 
     adicionarAvaliacaoLocal,
     avaliacoesFiltradas,
