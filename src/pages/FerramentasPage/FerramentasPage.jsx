@@ -14,13 +14,13 @@ const ferramentas = [
     icone: IoMapOutline,
     tipo: "car",
   },
-//   {
-//     id: "poligono-documento",
-//     titulo: "Polígono com Documento",
-//     descricao: "Gere o polígono a partir de um documento enviado.",
-//     icone: IoDocumentTextOutline,
-//     tipo: "documento",
-//   },
+  {
+    id: "poligono-incra",
+    titulo: "Polígono com INCRA/SIGEF",
+    descricao: "Gere o polígono a partir do código INCRA/SIGEF.",
+    icone: IoMapOutline,
+    tipo: "incra",
+  },
   {
     id: "categorias",
     titulo: "Categorias de imagem",
@@ -99,7 +99,7 @@ const FerramentasPage = () => {
         </div>
       </div>
 
-      {(tipoModal === "car" || tipoModal === "documento") && (
+      {(tipoModal === "car" || tipoModal === "incra") && (
         <PoligonoModal
           open={modalOpen}
           onClose={fecharModal}

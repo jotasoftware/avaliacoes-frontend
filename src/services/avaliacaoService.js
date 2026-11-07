@@ -143,7 +143,6 @@ export const exportarDocumentos = async (id, token) => {
 };
 
 export const uploadDocumentos = async ({ files, matNumber, cidade, estado }, token, onProgress) => {
-  console.log(token)
   try {
     const form = new FormData();
     files.forEach((f) => form.append("files", f));

@@ -2,54 +2,35 @@ import React, { useState, useEffect } from "react";
 import CampoForm from "../components/campoForm/CampoForm";
 import { toast } from "react-toastify";
 import { useFerramentas } from "../context/FerramentaContext";
+import { verificarCodigo } from "../utils/validators";
 
-/**
- * Modal genérico das ferramentas de polígono.
- *
- * Props:
- * - open: boolean
- * - onClose: () => void
- * - tipo: "car" | "documento" — define qual campo mostrar e qual função chamar
- */
 const PoligonoModal = ({ open, onClose, tipo }) => {
-  const { gerarPoligonoCar, gerarPoligonoDocumento, loadingFerramenta } =
+  const { gerarPoligonoCar, gerarPoligonoIncra, loadingFerramenta } =
     useFerramentas();
 
   const [car, setCar] = useState("");
-  const [arquivo, setArquivo] = useState(null);
+  const [incra, setIncra] = useState("");
 
   useEffect(() => {
     if (open) {
       setCar("");
-      setArquivo(null);
+      setIncra("");
     }
   }, [open, tipo]);
 
   if (!open) return null;
 
-  const handleArquivoChange = (e) => {
-    const file = e.target.files?.[0];
-    setArquivo(file || null);
-  };
-
   const handleEnviar = async () => {
     try {
       if (tipo === "car") {
-        if (!car.trim()) {
-          toast.warn("Informe o número do CAR");
-          return;
-        }
-
+        const codigo = verificarCodigo("CAR", car);
+        if (!codigo) return;
         await gerarPoligonoCar(car.trim());
-      } else {
-        if (!arquivo) {
-          toast.warn("Selecione um documento");
-          return;
-        }
-
-        await gerarPoligonoDocumento(arquivo);
+      } else if (tipo === "incra") {
+        const codigo = verificarCodigo("INCRA", incra);
+        if (!codigo) return;
+        await gerarPoligonoIncra(incra.trim());
       }
-
       onClose();
     } catch {
       // erro já tratado (toast) dentro do context
@@ -66,7 +47,7 @@ const PoligonoModal = ({ open, onClose, tipo }) => {
       <div className="relative bg-white w-full max-w-md rounded-xl shadow-lg p-6">
         <div className="mb-5">
           <h2 className="font-semibold text-medium text-zinc-700">
-            {tipo === "car" ? "Polígono com CAR" : "Polígono com Documento"}
+            {tipo === "car" ? "Polígono com CAR" : "Polígono com INCRA/SIGEF"}
           </h2>
         </div>
 
@@ -78,41 +59,12 @@ const PoligonoModal = ({ open, onClose, tipo }) => {
               onChange={setCar}
               placeholder="Digite o código do CAR"
             />
-          ) : (
-            <div className="flex flex-col gap-2">
-              <label className="text-sm text-zinc-600">Documento</label>
-
-              <label
-                className="
-                  flex
-                  flex-col
-                  items-center
-                  justify-center
-                  gap-2
-                  border-2
-                  border-dashed
-                  border-zinc-300
-                  rounded-lg
-                  py-8
-                  cursor-pointer
-                  hover:bg-zinc-50
-                  transition
-                "
-              >
-                <span className="text-sm text-zinc-500">
-                  {arquivo
-                    ? arquivo.name
-                    : "Clique para selecionar um arquivo"}
-                </span>
-
-                <input
-                  type="file"
-                  className="hidden"
-                  onChange={handleArquivoChange}
-                />
-              </label>
-            </div>
-          )}
+          ) : <CampoForm
+            label="INCRA"
+            value={incra}
+            onChange={setIncra}
+            placeholder="Digite o código do INCRA/SIGEF"
+          />}
         </div>
 
         <div className="flex justify-end gap-3 mt-6">

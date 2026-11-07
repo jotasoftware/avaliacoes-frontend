@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import {
   enviarPoligonoCar,
   enviarPoligonoDocumento,
+  enviarPoligonoIncra,
 } from "../services/ferramentaService";
 import { useAuth } from "./AuthContext";
 
@@ -54,6 +55,26 @@ export const FerramentasProvider = ({ children }) => {
     }
   };
 
+  const gerarPoligonoIncra = async (incra) => {
+    setLoadingFerramenta(true);
+
+    try {
+      const token = await getToken();
+      const blob = await enviarPoligonoIncra(incra, token);
+
+      dispararDownload(blob, `poligono_${incra}.kml`);
+      setResultadoPoligono(blob);
+      toast.info("Polígono gerado com sucesso");
+
+      return blob;
+    } catch (error) {
+      toast.error(error.message || "Erro ao gerar polígono pelo Incra");
+      throw error;
+    } finally {
+      setLoadingFerramenta(false);
+    }
+  };
+
   const gerarPoligonoDocumento = async (arquivo) => {
     setLoadingFerramenta(true);
 
@@ -80,6 +101,7 @@ export const FerramentasProvider = ({ children }) => {
         loadingFerramenta,
         resultadoPoligono,
         gerarPoligonoCar,
+        gerarPoligonoIncra,
         gerarPoligonoDocumento,
       }}
     >

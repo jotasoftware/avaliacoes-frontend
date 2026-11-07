@@ -52,6 +52,23 @@ export const enviarPoligonoCar = async (car, token) => {
   }
 };
 
+export const enviarPoligonoIncra = async (incra, token) => {
+  try {
+    const response = await api.post(
+      API_CONFIG.ferramentas.poligonoIncra,
+      { incra },
+      {
+        headers: getHeaders(token),
+        responseType: "blob",
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    await tratarErro(error, "Erro ao gerar polígono pelo CAR");
+  }
+};
+
 export const enviarPoligonoDocumento = async (arquivo, token) => {
   try {
     const formData = new FormData();

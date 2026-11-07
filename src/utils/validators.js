@@ -1,4 +1,4 @@
-// utils/validator.js
+import { toast } from "react-toastify";
 
 export const isValidCPF = (cpf) => {
     if (!cpf) return false;
@@ -90,6 +90,32 @@ export const isValidOriginais = (texto) => {
     return true;
   };
 
+  export const verificarCodigo = (tipo, codigo) => {
+    const limpo = String(codigo ?? "").trim();
+
+    if (!limpo) {
+        toast.warn(`Informe o código ${tipo === "CAR" ? "do CAR" : "INCRA/SIGEF"}`);
+        return null;
+    }
+
+    if (tipo === "CAR") {
+        if (!/^[A-Z]{2}-\d{7}-(?:[A-F0-9]{4}\.?){7}[A-F0-9]{4}$/i.test(limpo)) {
+            toast.warn("Código CAR inválido");
+            return null;
+        }
+    } else if (tipo === "INCRA") {
+        if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(limpo)) {
+            toast.warn("Código INCRA/SIGEF inválido");
+            return null;
+        }
+    } else {
+        toast.error(`Tipo de código desconhecido: ${tipo}`);
+        return null;
+    }
+
+    return limpo;
+};
+
 export default {
     isValidCPF,
     isValidCNPJ,
@@ -97,5 +123,6 @@ export default {
     isValidCEP,
     isValidDocument,
     isValidAcordo,
-    isValidOriginais
+    isValidOriginais,
+    verificarCodigo
 };

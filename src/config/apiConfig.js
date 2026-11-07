@@ -14,6 +14,7 @@ export const API_CONFIG = {
     },
     ferramentas: {
         poligonoCar: `${URL}/download/front/car`,
+        poligonoIncra: `${URL}/download/front/incra`,
         poligonoDocumento: `${URL}/download/documento`,
     },
     pendentes: {
