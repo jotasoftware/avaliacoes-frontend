@@ -10,7 +10,8 @@ import {
     moveCard as apiMoveCard,
     exportarImagens as apiExportarImagens,
     exportarDocumentos as apiExportarDocumentos,
-    uploadDocumentos as apiUploadDocumentos
+    uploadDocumentos as apiUploadDocumentos,
+    lerResumo as apiLerResumo 
 } from "../services/avaliacaoService";
 
 import { useAuth } from "./AuthContext";
@@ -332,6 +333,18 @@ export const AvaliacaoProvider = ({ children }) => {
         return lista;
       }, [avaliacoes, busca, periodo]);
  
+    const lerResumo = async (id, fileId) => {
+        try {
+            const token = await getToken();
+    
+            updateActivity();
+    
+            return await apiLerResumo(id, fileId, token);
+        } catch (error) {
+            console.error("Erro ao ler resumo:", error);
+            throw error;
+        }
+    };
 
     useEffect(() => {
     if (!loadingAuth && user) {
@@ -365,7 +378,9 @@ export const AvaliacaoProvider = ({ children }) => {
     setBusca,
     busca,
     setPeriodo,
-    periodo
+    periodo,
+
+    lerResumo
     };
 
     return (

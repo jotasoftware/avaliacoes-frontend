@@ -16,6 +16,7 @@ export const API_CONFIG = {
         poligonoCar: `${URL}/download/front/car`,
         poligonoIncra: `${URL}/download/front/incra`,
         poligonoDocumento: `${URL}/download/documento`,
+        swot: `${URL}/swot`,
     },
     pendentes: {
         getAll: `${URL}/pendente`,

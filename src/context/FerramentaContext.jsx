@@ -4,6 +4,7 @@ import {
   enviarPoligonoCar,
   enviarPoligonoDocumento,
   enviarPoligonoIncra,
+  enviarSwot,
 } from "../services/ferramentaService";
 import { useAuth } from "./AuthContext";
 
@@ -95,6 +96,34 @@ export const FerramentasProvider = ({ children }) => {
     }
   };
 
+  const gerarSwot = async (dados) => {
+    setLoadingFerramenta(true);
+
+    try {
+      const token = await getToken();
+      const blob = await enviarSwot(dados, token);
+
+      return new Blob([blob], { type: "image/png" });
+    } catch (error) {
+      toast.error(error.message || "Erro ao gerar SWOT");
+      throw error;
+    } finally {
+      setLoadingFerramenta(false);
+    }
+  };
+
+  const copiarSwot = async (blob) => {
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({ "image/png": blob }),
+      ]);
+      toast.info("Imagem copiada. Cole no Word com Ctrl+V");
+    } catch (error) {
+      console.error(error);
+      toast.error("Não foi possível copiar. Use o botão Baixar");
+    }
+  };
+
   return (
     <FerramentasContext.Provider
       value={{
@@ -103,6 +132,8 @@ export const FerramentasProvider = ({ children }) => {
         gerarPoligonoCar,
         gerarPoligonoIncra,
         gerarPoligonoDocumento,
+        gerarSwot,
+        copiarSwot,
       }}
     >
       {children}

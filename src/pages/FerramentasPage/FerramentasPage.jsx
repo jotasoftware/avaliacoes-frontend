@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { IoDocumentTextOutline, IoMapOutline, IoPricetagsOutline, IoLogoOctocat, IoPaperPlaneOutline } from "react-icons/io5";
+import { IoDocumentTextOutline, IoMapOutline, IoPricetagsOutline, IoGridOutline, IoLogoOctocat, IoPaperPlaneOutline } from "react-icons/io5";
 import FerramentaCard from "../../components/ferramentasCard/FerramentasCard";
 import PoligonoModal from "../../modals/PoligonoModal";
 import CategoriasModal from "../../modals/CategoriasModal";
+import SwotModal from "../../modals/SwotModal";
 
 const TELEGRAM_BOT_URL = "https://web.telegram.org/k/#@avaliobot";
 
@@ -20,6 +21,13 @@ const ferramentas = [
     descricao: "Gere o polígono a partir do código INCRA/SIGEF.",
     icone: IoMapOutline,
     tipo: "incra",
+  },
+  {
+    id: "swot",
+    titulo: "Análise SWOT",
+    descricao: "Marque os itens e gere a imagem do SWOT pra colar no laudo.",
+    icone: IoGridOutline,
+    tipo: "swot",
   },
   {
     id: "categorias",
@@ -109,6 +117,10 @@ const FerramentasPage = () => {
 
       {tipoModal === "categorias" && (
         <CategoriasModal open={modalOpen} onClose={fecharModal} />
+      )}
+
+      {tipoModal === "swot" && (
+        <SwotModal open={modalOpen} onClose={fecharModal} />
       )}
     </div>
   );

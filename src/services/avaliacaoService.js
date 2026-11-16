@@ -166,3 +166,18 @@ export const uploadDocumentos = async ({ files, matNumber, cidade, estado }, tok
     tratarErro(error, "Erro ao enviar documentos");
   }
 };
+
+export const lerResumo = async (id, fileId, token) => {
+  try {
+    const { data } = await api.get(
+      `${API_CONFIG.avaliacao.getById}/${id}/audios/${fileId}`,
+      {
+        headers: getHeaders(token),
+      }
+    );
+
+    return data;
+  } catch (error) {
+    tratarErro(error, "Erro ao ler resumo");
+  }
+};

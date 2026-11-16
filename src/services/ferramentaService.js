@@ -91,3 +91,20 @@ export const enviarPoligonoDocumento = async (arquivo, token) => {
     await tratarErro(error, "Erro ao gerar polígono pelo documento");
   }
 };
+
+export const enviarSwot = async (dados, token) => {
+  try {
+    const { data } = await api.post(
+      API_CONFIG.ferramentas.swot,
+      dados,
+      {
+        headers: getHeaders(token),
+        responseType: "blob",
+      }
+    );
+
+    return data;
+  } catch (error) {
+    await tratarErro(error, "Erro ao gerar SWOT");
+  }
+};
