@@ -49,9 +49,32 @@ const PendentesPage = () => {
   return (
     <div className="flex flex-col gap-6 p-4">
       <div className="w-full bg-white rounded-xl border border-zinc-200 shadow-sm p-8">
-        <h1 className="text-xl font-semibold text-zinc-800 mb-6">
-          Pendentes
-        </h1>
+        <div className="flex justify-between">
+          <h1 className="text-xl font-semibold text-zinc-800 mb-6">
+            Pendentes
+          </h1>
+          <div className="flex justify-end mb-4">
+              <a
+                href="https://drive.google.com/drive/u/0/folders/1WLBjqVpmJ7LRJvLTBEhBRbEOp58DmUMq"
+                target="_blank"
+                rel="noreferrer"
+                className="
+                  px-4
+                  py-2
+                  text-sm
+                  text-white
+                  font-medium
+                  transition
+                  bg-zinc-700
+                  rounded-lg
+                  hover:bg-zinc-800
+                  hover:text-white
+                "
+              >
+                Sem avaliação
+              </a>
+            </div>
+        </div>
 
         {loadingPendentes ? (
           <div className="w-full flex justify-center py-10">
